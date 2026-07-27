@@ -1,0 +1,51 @@
+name: Build and Verify IPTV System
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. جلب الكود من المستودع
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. إعداد بيئة Node.js
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 3. تثبيت واختبار خدمة Proxy
+      - name: Build Proxy
+        run: |
+          cd proxy
+          npm install
+
+      # 4. بناء واجهة Stationarr (Frontend)
+      - name: Build Stationarr Frontend
+        run: |
+          if [ -d "stationarr/frontend" ]; then
+            cd stationarr/frontend
+            npm install
+            npm run build
+          fi
+
+      # 5. تثبيت اعتماديات backend الخاص بـ Stationarr
+      - name: Build Stationarr Backend
+        run: |
+          if [ -d "stationarr/backend" ]; then
+            cd stationarr/backend
+            npm install --omit=dev
+          fi
+
+      # 6. اختبار صحة ملفات Docker و Docker Compose
+      - name: Verify Docker Compose Build
+        run: |
+          docker-compose build
+          
