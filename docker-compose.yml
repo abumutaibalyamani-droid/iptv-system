@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  proxy:
+    build: ./proxy
+    ports:
+      - "3001:3001"
+    environment:
+      - APP_PORT=3001
+    restart: always
+
+  stationarr:
+    build: ./stationarr
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./stationarr/data:/app/data
+    restart: always

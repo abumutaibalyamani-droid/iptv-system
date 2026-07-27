@@ -1,0 +1,13 @@
+{
+  "name": "iptv-system-root",
+  "version": "1.0.0",
+  "description": "Integrated IPTV System Workspace",
+  "scripts": {
+    "start": "./start.sh",
+    "proxy": "cd proxy && npm start",
+    "stationarr": "cd stationarr/backend && node server.js"
+  },
+  "keywords": ["iptv", "proxy", "stationarr", "xtream"],
+  "author": "",
+  "license": "MIT"
+}
